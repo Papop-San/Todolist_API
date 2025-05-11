@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createTodo , deletebyId, updateTodobyId, findManyTodolist } from "./todo.service";
+import { createTodo , deletebyId, updateTodobyId,findbyIdTodo ,findManyTodolist, findManyTodo } from "./todo.service";
 
 export const router = Router();
 
@@ -11,7 +11,7 @@ router.post('/todos', async (req, res) => {
       res.status(201).json(newTodo); 
 
    } catch (err) {
-      res.status(500).send(err)
+      console.log(err);
    }
 });
 
@@ -25,7 +25,7 @@ router.patch('/todos/:id', async (req, res) => {
       res.status(200).json({message: "Todo updated successfully"});
          
    }catch(err){
-      res.status(500).send(err);
+     console.log(err);
    }
 })
 
@@ -39,6 +39,33 @@ router.delete("/todos/:id", async (req, res) => {
    }
 });
 
+// Get todo by Id
+router.get('/todos/:id', async (req, res) => {
+   try{
+      const result = await findbyIdTodo(req.params.id);
+   
+      if (result === null) {
+         res.status(404).json({ message: `Todo not found ==> ${req.params.id}` });
+      }
+      res.status(200).json(result);
+   }catch(err){
+      res.status(500).send(err);
+   }
+})
+
+// Get all Search list 
+router.get("/todos", async (req, res) => {
+   try{
+      const querylist  = await findManyTodo(req.query);
+      res.send(querylist);
+   }catch(err){
+      res.status(500).send(err);
+   }
+})
+
+
+
+// Get all todos
 router.get('/todos', async (req, res) => {
    try{
      const list = await findManyTodolist();

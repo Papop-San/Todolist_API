@@ -13,6 +13,14 @@ const TodoSchema = new Schema({
         type: String,
         enum: ["in-progress", "completed", "blocking" , 'cancelled'],
         default: "in-progress"  
+    },
+    assignee:{
+        type: String,
+        required: true
+    },
+    subscriberCounter:{
+        type: Number,
+        default: 0 
     }
 }) 
 
